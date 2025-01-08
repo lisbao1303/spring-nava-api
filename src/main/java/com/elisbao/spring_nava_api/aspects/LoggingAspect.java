@@ -26,13 +26,6 @@ public class LoggingAspect {
         log.setMethod(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()); // Método completo
         log.setTimestamp(LocalDateTime.now()); // Timestamp inicial
 
-        // Captura o método HTTP (GET, POST, etc.)
-//        String httpMethod = request.getMethod();
-//        log.setHttpMethod(httpMethod);
-
-        // Captura os dados da requisição
-        //log.setRequestData(captureRequestData(request));
-
         // Log de sucesso inicialmente como falso
         log.setSuccess(false);
 
