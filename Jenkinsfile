@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/lisbao1303/spring-nava-api.git' // Repositório
+                git 'git@github.com:lisbao1303/spring-nava-api.git' // Repositório
             }
         }
 
