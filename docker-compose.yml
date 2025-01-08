@@ -1,0 +1,15 @@
+services:
+  spring-nava-api:
+    build: .
+    container_name: spring-nava-api-container
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/navaapidb?useSSL=false&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=123456781303
+    ports:
+      - "8080:8080"  # Mapeia a porta 8080 do container para a porta 8080 do host
+    volumes:
+      - ./target:/usr/src/spring-nava-api/  # Mapeia a pasta target do host para o diretório no container
+    stdin_open: true
+    network_mode: "host"  # Usa a rede do host
+    tty: true
