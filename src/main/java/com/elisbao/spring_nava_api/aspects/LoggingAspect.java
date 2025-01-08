@@ -20,7 +20,7 @@ public class LoggingAspect {
 
     @Around("@annotation(logOperation)")
     public Object logOperation(ProceedingJoinPoint joinPoint, LogOperation logOperation) throws Throwable {
-        // Criar uma instância de OperationLog
+
         OperationLog log = new OperationLog();
         log.setOperationName(joinPoint.getSignature().getName()); // Nome da operação
         log.setMethod(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()); // Método completo
