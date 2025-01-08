@@ -1,3 +1,22 @@
+Api para busca de CEP e cadastro de endereço para usuários autenticados.
+Utiliza autenticação via token JWT (retorno Bearer {token} no header).
+
+POST /user -> criar novo usuário.
+POST /login -> obter token.
+
+Swagger UI -> /swagger-ui/index.html
+API Docs -> /v3/api-docs/
+
+DATABASE:
+Database Postgres, db:navaapidb, para armazenar dados do usuário.
+
+LOGS:
+O aspect:LoggingAspect captura dados das operações e armazena no ElasticSearch (para posteriores consultas em um Kibana por ex.) 
+Para gravar dados de um endpoint nos operation-log utilizar: @LogOperation
+
+API EXTERNA CEP:
+https://viacep.com.br/ws/{cep}/json/
+
 Execução da aplicatição (clássico Maven/SpringBoot)
 - Instalar dependências:
   `mvn clean install`
@@ -8,7 +27,7 @@ Testes:
 
 `mvn clean test`
 
-Criando o projeto (perfil de versão):
+Criando o projeto (perfil de release):
 
 `mvn clean package -P release -DskipTests`
 
