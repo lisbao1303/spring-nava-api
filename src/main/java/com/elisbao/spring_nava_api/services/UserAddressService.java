@@ -9,7 +9,6 @@ import com.elisbao.spring_nava_api.services.exceptions.AuthorizationException;
 import com.elisbao.spring_nava_api.services.exceptions.DataBindingViolationException;
 import com.elisbao.spring_nava_api.services.exceptions.ObjectNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,20 +18,21 @@ import java.util.Objects;
 @Service
 public class UserAddressService {
 
-    @Autowired
-    private UserAddressRepository userAddressRepository;
+    private final UserAddressRepository userAddressRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
+    public UserAddressService(UserAddressRepository userAddressRepository, UserService userService) {
+        this.userAddressRepository = userAddressRepository;
+        this.userService = userService;
+    }
 
     public List<UserAddressDTO> findAllByUser() {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
         if (Objects.isNull(userSpringSecurity))
             throw new AuthorizationException("Acesso negado!");
 
-        List<UserAddressDTO> adresses = this.userAddressRepository.findByUser_Id(userSpringSecurity.getId());
-        return adresses;
+        return this.userAddressRepository.findByUser_Id(userSpringSecurity.getId());
     }
 
     @Transactional
@@ -95,9 +95,8 @@ public class UserAddressService {
     }
 
     private UserAddress findById(Long id) {
-        UserAddress userAddress = this.userAddressRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
+        return this.userAddressRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
                 "Endereço não encontrado! Id: " + id + ", Tipo: " + UserAddress.class.getName()));
-        return userAddress;
     }
 
     public UserAddress fromDTO(@Valid UserAddressDTO dto) {

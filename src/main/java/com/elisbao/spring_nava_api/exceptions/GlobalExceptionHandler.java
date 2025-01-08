@@ -3,7 +3,6 @@ package com.elisbao.spring_nava_api.exceptions;
 import com.elisbao.spring_nava_api.services.exceptions.AuthorizationException;
 import com.elisbao.spring_nava_api.services.exceptions.DataBindingViolationException;
 import com.elisbao.spring_nava_api.services.exceptions.ObjectNotFoundException;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -11,14 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,21 +29,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
 
     @Value("${server.error.include-exception}")
     private boolean printStackTrace;
-
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException methodArgumentNotValidException,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                "Validation error. Check 'errors' field for details.");
-        for (FieldError fieldError : methodArgumentNotValidException.getBindingResult().getFieldErrors()) {
-            errorResponse.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());
-        }
-        return ResponseEntity.unprocessableEntity().body(errorResponse);
-    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -69,7 +50,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
             DataIntegrityViolationException dataIntegrityViolationException,
             WebRequest request) {
         String errorMessage = dataIntegrityViolationException.getMostSpecificCause().getMessage();
-        log.error("Failed to save entity with integrity problems: " + errorMessage, dataIntegrityViolationException);
+        log.error("Failed to save entity with integrity problems: {}", errorMessage, dataIntegrityViolationException);
         return buildErrorResponse(
                 dataIntegrityViolationException,
                 errorMessage,
@@ -170,8 +151,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-            AuthenticationException exception) throws IOException, ServletException {
-        Integer status = HttpStatus.UNAUTHORIZED.value();
+            AuthenticationException exception) throws IOException {
+        int status = HttpStatus.UNAUTHORIZED.value();
         response.setStatus(status);
         response.setContentType("application/json");
         ErrorResponse errorResponse = new ErrorResponse(status, "Username or password are invalid");

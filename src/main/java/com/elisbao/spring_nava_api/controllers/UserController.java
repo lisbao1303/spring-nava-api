@@ -1,6 +1,5 @@
 package com.elisbao.spring_nava_api.controllers;
 
-import com.elisbao.spring_nava_api.annotations.LogOperation;
 import com.elisbao.spring_nava_api.models.User;
 import com.elisbao.spring_nava_api.models.dto.UserCreateDTO;
 import com.elisbao.spring_nava_api.models.dto.UserUpdateDTO;
@@ -9,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +21,11 @@ import java.net.URI;
 @Validated
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get User by ID", description = "Fetch a user by their unique ID")

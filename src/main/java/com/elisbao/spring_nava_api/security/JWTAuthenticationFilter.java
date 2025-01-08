@@ -4,7 +4,6 @@ import com.elisbao.spring_nava_api.exceptions.GlobalExceptionHandler;
 import com.elisbao.spring_nava_api.models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,8 +36,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userCredentials.getUsername(), userCredentials.getPassword(), new ArrayList<>());
 
-            Authentication authentication = this.authenticationManager.authenticate(authToken);
-            return authentication;
+            return this.authenticationManager.authenticate(authToken);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -46,13 +44,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
-            HttpServletResponse response, FilterChain filterChain, Authentication authentication)
-            throws IOException, ServletException {
+            HttpServletResponse response, FilterChain filterChain, Authentication authentication) {
         UserSpringSecurity userSpringSecurity = (UserSpringSecurity) authentication.getPrincipal();
         String username = userSpringSecurity.getUsername();
         String token = this.jwtUtil.generateToken(username);
         response.addHeader("Authorization", "Bearer " + token);
-        response.addHeader("access-control-expose-headers", "Authorization");
+        response.addHeader("Access-Control-Expose-Headers", "Authorization");
     }
 
 }

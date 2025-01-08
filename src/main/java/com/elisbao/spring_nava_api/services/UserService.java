@@ -10,7 +10,6 @@ import com.elisbao.spring_nava_api.services.exceptions.AuthorizationException;
 import com.elisbao.spring_nava_api.services.exceptions.DataBindingViolationException;
 import com.elisbao.spring_nava_api.services.exceptions.ObjectNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,11 +22,14 @@ import java.util.stream.Stream;
 @Service
 public class UserService {
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userRepository = userRepository;
+    }
 
     public User findById(Long id) {
         UserSpringSecurity userSpringSecurity = authenticated();
@@ -35,10 +37,8 @@ public class UserService {
                 || !userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId()))
             throw new AuthorizationException("Acesso negado!");
 
-        User user = this.userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
+        return this.userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
                 "Usuário não encontrado! Id: " + id + ", Tipo: " + User.class.getName()));
-
-        return user;
     }
 
     @Transactional
