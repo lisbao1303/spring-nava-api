@@ -11,7 +11,7 @@ public class CepService {
     private final RestTemplate restTemplate;
 
     @Value("${cep.api.url}")
-    private String cepApiUrl;
+    String cepApiUrl;
 
     public CepService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
