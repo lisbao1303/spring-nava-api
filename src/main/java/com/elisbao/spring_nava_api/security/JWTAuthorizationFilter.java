@@ -16,9 +16,9 @@ import java.util.Objects;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private JWTUtil jwtUtil;
+    private final JWTUtil jwtUtil;
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
             UserDetailsService userDetailsService) {
@@ -45,9 +45,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         if (this.jwtUtil.isValidToken(token)) {
             String username = this.jwtUtil.getUsername(token);
             UserDetails user = this.userDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticatedUser = new UsernamePasswordAuthenticationToken(user, null,
+            return new UsernamePasswordAuthenticationToken(user, null,
                     user.getAuthorities());
-            return authenticatedUser;
         }
         return null;
     }

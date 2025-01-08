@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "CEP code search ", description = "Operations related to CEP code search")
 public class CepController {
 
-    @Autowired
-    private CepService cepService;
+    private final CepService cepService;
 
+    public CepController(CepService cepService) {
+        this.cepService = cepService;
+    }
 
     @Operation(
             summary = "Find address by CEP",
@@ -35,10 +36,6 @@ public class CepController {
     @GetMapping("/{cep}")
     @LogOperation
     public ResponseEntity<CepResponseDTO> buscarCep(@PathVariable String cep) {
-
-        if (!cep.matches("\\d{5}-\\d{3}")) {
-            return ResponseEntity.badRequest().build();
-        }
 
         CepResponseDTO response = cepService.buscarCep(cep);
 

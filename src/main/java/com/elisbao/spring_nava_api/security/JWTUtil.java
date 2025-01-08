@@ -29,8 +29,7 @@ public class JWTUtil {
     }
 
     private SecretKey getKeyBySecret() {
-        SecretKey key = Keys.hmacShaKeyFor(this.secret.getBytes());
-        return key;
+        return Keys.hmacShaKeyFor(this.secret.getBytes());
     }
 
     public boolean isValidToken(String token) {
@@ -39,8 +38,7 @@ public class JWTUtil {
             String username = claims.getSubject();
             Date expirationDate = claims.getExpiration();
             Date now = new Date(System.currentTimeMillis());
-            if (Objects.nonNull(username) && Objects.nonNull(expirationDate) && now.before(expirationDate))
-                return true;
+            return Objects.nonNull(username) && Objects.nonNull(expirationDate) && now.before(expirationDate);
         }
         return false;
     }

@@ -3,7 +3,6 @@ package com.elisbao.spring_nava_api.configs;
 import com.elisbao.spring_nava_api.security.JWTAuthenticationFilter;
 import com.elisbao.spring_nava_api.security.JWTAuthorizationFilter;
 import com.elisbao.spring_nava_api.security.JWTUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,13 +27,14 @@ import java.util.Arrays;
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
-        private AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
 
-        @Autowired
-        private UserDetailsService userDetailsService;
+        private final JWTUtil jwtUtil;
 
-        @Autowired
-        private JWTUtil jwtUtil;
+        public SecurityConfig(UserDetailsService userDetailsService, JWTUtil jwtUtil) {
+                this.userDetailsService = userDetailsService;
+                this.jwtUtil = jwtUtil;
+        }
 
         private static final String[] PUBLIC_MATCHERS = {
                         "/",
@@ -57,7 +57,7 @@ public class SecurityConfig {
                                 .getSharedObject(AuthenticationManagerBuilder.class);
                 authenticationManagerBuilder.userDetailsService(this.userDetailsService)
                                 .passwordEncoder(bCryptPasswordEncoder());
-                this.authenticationManager = authenticationManagerBuilder.build();
+            AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
                 http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
@@ -65,8 +65,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 ).authenticationManager(authenticationManager);
 
-                http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
-                http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, this.jwtUtil,
+                http.addFilter(new JWTAuthenticationFilter(authenticationManager, this.jwtUtil));
+                http.addFilter(new JWTAuthorizationFilter(authenticationManager, this.jwtUtil,
                                 this.userDetailsService));
 
                 http.sessionManagement(session -> session

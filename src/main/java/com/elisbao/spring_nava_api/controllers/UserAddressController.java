@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +25,11 @@ import java.util.List;
 @Validated
 public class UserAddressController {
 
-    @Autowired
-    private UserAddressService userAddressService;
+    private final UserAddressService userAddressService;
+
+    public UserAddressController(UserAddressService userAddressService) {
+        this.userAddressService = userAddressService;
+    }
 
     @Operation(
             summary = "Find all addresses by user",
@@ -73,7 +75,6 @@ public class UserAddressController {
     )
     @PutMapping("/{id}")
     @LogOperation
-
     public ResponseEntity<Void> update(
             @Parameter(description = "Updated address object") @Valid @RequestBody UserAddressDTO obj,
             @Parameter(description = "ID of the address to be updated") @PathVariable Long id) {
@@ -91,7 +92,6 @@ public class UserAddressController {
     )
     @DeleteMapping("/{id}")
     @LogOperation
-
     public ResponseEntity<Void> delete(@Parameter(description = "ID of the address to be deleted") @PathVariable Long id) {
         this.userAddressService.delete(id);
         return ResponseEntity.noContent().build();
