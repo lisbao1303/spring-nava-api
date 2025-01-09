@@ -1,4 +1,4 @@
-package com.elisbao.spring_nava_api.services;
+package com.elisbao.spring_nava_api.unit.services;
 
 import com.elisbao.spring_nava_api.models.User;
 import com.elisbao.spring_nava_api.models.UserAddress;
@@ -6,6 +6,8 @@ import com.elisbao.spring_nava_api.models.dto.UserAddressDTO;
 import com.elisbao.spring_nava_api.models.enums.ProfileEnum;
 import com.elisbao.spring_nava_api.repositories.UserAddressRepository;
 import com.elisbao.spring_nava_api.security.UserSpringSecurity;
+import com.elisbao.spring_nava_api.services.UserAddressService;
+import com.elisbao.spring_nava_api.services.UserService;
 import com.elisbao.spring_nava_api.services.exceptions.DataBindingViolationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,14 +62,14 @@ class UserAddressServiceTest {
         User user = new User();
         user.setId(1L);
 
-        List<UserAddressDTO> listAddress = new ArrayList<>();
-        UserAddressDTO address = new UserAddressDTO();
+        List<UserAddress> listAddress = new ArrayList<>();
+        UserAddress address = new UserAddress();
         listAddress.add(address);
 
         when(userSpringSecurity.getId()).thenReturn(1L);
         when(userAddressRepository.findByUser_Id(1L)).thenReturn(listAddress);
 
-        List<UserAddressDTO> result = userAddressService.findAllByUser();
+        List<UserAddress> result = userAddressService.findAllByUser();
 
         assertNotNull(result);
         assertEquals(1, result.size());

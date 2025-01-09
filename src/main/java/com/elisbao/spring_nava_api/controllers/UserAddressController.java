@@ -40,9 +40,8 @@ public class UserAddressController {
             }
     )
     @GetMapping("/user")
-    @LogOperation
-    public ResponseEntity<List<UserAddressDTO>> findAllByUser() {
-        List<UserAddressDTO> objs = this.userAddressService.findAllByUser();
+    public ResponseEntity<List<UserAddress>> findAllByUser() {
+        List<UserAddress> objs = this.userAddressService.findAllByUser();
         return ResponseEntity.ok().body(objs);
     }
 
@@ -74,7 +73,6 @@ public class UserAddressController {
             }
     )
     @PutMapping("/{id}")
-    @LogOperation
     public ResponseEntity<Void> update(
             @Parameter(description = "Updated address object") @Valid @RequestBody UserAddressDTO obj,
             @Parameter(description = "ID of the address to be updated") @PathVariable Long id) {

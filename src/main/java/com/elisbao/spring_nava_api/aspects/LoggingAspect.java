@@ -34,7 +34,6 @@ public class LoggingAspect {
 
         Object result = null;
         try {
-
             result = joinPoint.proceed();
             log.setSuccess(true);
             log.setResponseData(result);

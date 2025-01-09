@@ -39,3 +39,6 @@ O Elasticsearch demora um tempo para iniciar após o contêiner subir
 Subir o contêiner da aplicação Spring (após o Elasticsearch e PostgreSQL estarem em funcionamento):
 
 `docker compose -f docker-compose.yml up --build -d`
+
+
+JENKINS: 

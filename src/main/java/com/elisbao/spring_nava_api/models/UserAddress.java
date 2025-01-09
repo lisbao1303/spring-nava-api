@@ -1,5 +1,6 @@
 package com.elisbao.spring_nava_api.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -22,10 +23,11 @@ public class UserAddress {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
     @Column(name = "cep", length = 9, nullable = false)
-    @Size(min = 9, max = 9)
+    @Size(min = 8, max = 9)
     @NotBlank
     private String cep;
 

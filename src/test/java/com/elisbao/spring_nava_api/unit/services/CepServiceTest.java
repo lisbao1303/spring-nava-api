@@ -1,12 +1,14 @@
-package com.elisbao.spring_nava_api.services;
+package com.elisbao.spring_nava_api.unit.services;
 
 import com.elisbao.spring_nava_api.models.dto.CepResponseDTO;
+import com.elisbao.spring_nava_api.services.CepService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -29,8 +31,8 @@ class CepServiceTest {
     void setUp() {
         // Inicializa os mocks
         MockitoAnnotations.openMocks(this);
-        cepApiUrl = "http://localhost:8080/api/v1/cep";
-        cepService.cepApiUrl = "http://localhost:8080/api/v1/cep";
+        cepApiUrl = "http://localhost:4200/api/v1/{cep}";
+        ReflectionTestUtils.setField(cepService, "cepApiUrl", "http://localhost:4200/api/v1/{cep}");
     }
 
     @Test

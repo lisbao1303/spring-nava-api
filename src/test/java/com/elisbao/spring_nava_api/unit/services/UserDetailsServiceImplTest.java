@@ -1,9 +1,10 @@
-package com.elisbao.spring_nava_api.services;
+package com.elisbao.spring_nava_api.unit.services;
 
 import com.elisbao.spring_nava_api.models.User;
 import com.elisbao.spring_nava_api.models.enums.ProfileEnum;
 import com.elisbao.spring_nava_api.repositories.UserRepository;
 import com.elisbao.spring_nava_api.security.UserSpringSecurity;
+import com.elisbao.spring_nava_api.services.UserDetailsServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

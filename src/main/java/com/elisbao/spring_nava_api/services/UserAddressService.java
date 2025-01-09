@@ -27,7 +27,7 @@ public class UserAddressService {
         this.userService = userService;
     }
 
-    public List<UserAddressDTO> findAllByUser() {
+    public List<UserAddress> findAllByUser() {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
         if (Objects.isNull(userSpringSecurity))
             throw new AuthorizationException("Acesso negado!");
@@ -84,7 +84,6 @@ public class UserAddressService {
         return userAddressRepository.save(existingAddress);
     }
 
-
     public void delete(Long id) {
         findById(id);
         try {
@@ -108,6 +107,7 @@ public class UserAddressService {
         entity.setBairro(dto.getBairro());
         entity.setLocalidade(dto.getLocalidade());
         entity.setUf(dto.getUf());
+        entity.setRegiao(dto.getRegiao());
         return entity;
     }
 }

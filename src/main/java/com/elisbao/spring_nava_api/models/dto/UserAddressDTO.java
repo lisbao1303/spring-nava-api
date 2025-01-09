@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserAddressDTO {
 
-    @Size(min = 9, max = 9)
+    @Size(min = 8, max = 9)
     @NotBlank
     private String cep;
 
