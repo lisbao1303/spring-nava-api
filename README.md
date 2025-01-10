@@ -1,6 +1,8 @@
 Api para busca de CEP e cadastro de endereço para usuários autenticados.
 Utiliza autenticação via token JWT (retorno Bearer {token} no header).
 
+![Alt text](/images/desenhoSolucao.png)
+
 POST /user -> criar novo usuário.
 POST /login -> obter token.
 
@@ -40,5 +42,10 @@ Subir o contêiner da aplicação Spring (após o Elasticsearch e PostgreSQL est
 
 `docker compose -f docker-compose.yml up --build -d`
 
+Cobertura de testes (unitarios e integração)
+Utiliza test containers e wiremock
+![Alt text](/images/coverage.png)
+
 
 JENKINS: 
+Pipeline para execução de testes, build e deploy na AWS ECS.
